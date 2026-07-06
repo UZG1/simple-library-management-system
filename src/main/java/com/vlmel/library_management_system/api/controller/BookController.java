@@ -3,7 +3,8 @@ package com.vlmel.library_management_system.api.controller;
 import com.vlmel.library_management_system.api.request.CreateBookRequest;
 import com.vlmel.library_management_system.api.request.UpdateBookRequest;
 import com.vlmel.library_management_system.api.request.UpdateCopyBookStatusRequest;
-import com.vlmel.library_management_system.api.response.GetAvailableCopyOfBook;
+import com.vlmel.library_management_system.api.response.CreateBookResponse;
+import com.vlmel.library_management_system.api.response.GetAvailableCopyOfBookResponse;
 import com.vlmel.library_management_system.api.response.GetBookDetailsResponse;
 import com.vlmel.library_management_system.api.response.GetBookResponse;
 import com.vlmel.library_management_system.service.BookService;
@@ -33,8 +34,8 @@ public class BookController {
     }
 
     @PostMapping
-    public GetBookResponse createBook(@RequestBody @Valid CreateBookRequest request) {
-        return null;
+    public CreateBookResponse createBook(@RequestBody @Valid CreateBookRequest request) {
+        return bookService.createBook(request);
     }
 
     @GetMapping("/{id}")
@@ -53,19 +54,19 @@ public class BookController {
     }
 
     @GetMapping("/{id}/copies")
-    public List<GetAvailableCopyOfBook> getAllAvailableCopiesOfBook(@PathVariable Long id) {
+    public List<GetAvailableCopyOfBookResponse> getAllAvailableCopiesOfBook(@PathVariable Long id) {
         return null;
     }
 
     @PostMapping("/{id}/copies")
-    public GetAvailableCopyOfBook createCopyForBook(@PathVariable Long id) {
+    public GetAvailableCopyOfBookResponse createCopyForBook(@PathVariable Long id) {
         return null;
     }
 
     @PutMapping("/{id}/copies/{copyId}")
-    public GetAvailableCopyOfBook updateCopyBookStatus(@PathVariable Long id,
-                                                       @PathVariable Long copyId,
-                                                       @RequestBody @Valid UpdateCopyBookStatusRequest request) {
+    public GetAvailableCopyOfBookResponse updateCopyBookStatus(@PathVariable Long id,
+                                                               @PathVariable Long copyId,
+                                                               @RequestBody @Valid UpdateCopyBookStatusRequest request) {
         return null;
     }
 }
