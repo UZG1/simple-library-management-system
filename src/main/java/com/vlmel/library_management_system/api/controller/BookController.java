@@ -2,6 +2,7 @@ package com.vlmel.library_management_system.api.controller;
 
 import com.vlmel.library_management_system.api.request.CreateBookRequest;
 import com.vlmel.library_management_system.api.request.UpdateBookRequest;
+import com.vlmel.library_management_system.api.request.UpdateCopyBookStatusRequest;
 import com.vlmel.library_management_system.api.response.GetAvailableCopyOfBook;
 import com.vlmel.library_management_system.api.response.GetBookDetailsResponse;
 import com.vlmel.library_management_system.api.response.GetBookResponse;
@@ -53,6 +54,14 @@ public class BookController {
 
     @PostMapping("/{id}/copies")
     public GetAvailableCopyOfBook createCopyForBook(@PathVariable String id) {
+        return null;
+    }
+
+    @PutMapping("/{id}/copies/{copyId}")
+    public GetAvailableCopyOfBook updateCopyBookStatus(@PathVariable String id,
+                                                       @PathVariable String copyId,
+                                                       UpdateCopyBookStatusRequest request) {
+
         return null;
     }
 
