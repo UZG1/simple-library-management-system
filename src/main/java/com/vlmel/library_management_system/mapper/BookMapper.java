@@ -1,4 +1,13 @@
 package com.vlmel.library_management_system.mapper;
 
-public class BookMapper {
+import com.vlmel.library_management_system.api.request.CreateBookRequest;
+import com.vlmel.library_management_system.api.response.GetBookResponse;
+import com.vlmel.library_management_system.model.BookEntity;
+import org.mapstruct.Mapper;
+
+@Mapper(componentModel = "spring")
+public interface BookMapper {
+    GetBookResponse toBookResponse(BookEntity entity);
+
+    BookEntity toBookEntity(CreateBookRequest dto);
 }

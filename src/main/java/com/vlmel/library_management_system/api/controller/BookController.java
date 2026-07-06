@@ -6,7 +6,9 @@ import com.vlmel.library_management_system.api.request.UpdateCopyBookStatusReque
 import com.vlmel.library_management_system.api.response.GetAvailableCopyOfBook;
 import com.vlmel.library_management_system.api.response.GetBookDetailsResponse;
 import com.vlmel.library_management_system.api.response.GetBookResponse;
+import com.vlmel.library_management_system.service.BookService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,11 +22,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/books")
+@RequiredArgsConstructor
 public class BookController {
+
+    private final BookService bookService;
 
     @GetMapping
     public List<GetBookResponse> getAllBooks() {
-        return null;
+        return bookService.getAllBooks();
     }
 
     @PostMapping
