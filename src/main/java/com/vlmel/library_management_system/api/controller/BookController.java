@@ -33,37 +33,34 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public GetBookDetailsResponse getBookById() {
+    public GetBookDetailsResponse getBookById(@PathVariable Long id) {
         return null;
     }
 
     @PutMapping("/{id}")
-    public GetBookResponse updateBookById(@PathVariable String id, @RequestBody @Valid UpdateBookRequest request) {
+    public GetBookResponse updateBookById(@PathVariable Long id, @RequestBody @Valid UpdateBookRequest request) {
         return null;
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBookById(@PathVariable String id) {
+    public void deleteBookById(@PathVariable Long id) {
         //return no content 204
-        return;
     }
 
     @GetMapping("/{id}/copies")
-    public List<GetAvailableCopyOfBook> getAllAvailableCopiesOfBook(@PathVariable String id) {
+    public List<GetAvailableCopyOfBook> getAllAvailableCopiesOfBook(@PathVariable Long id) {
         return null;
     }
 
     @PostMapping("/{id}/copies")
-    public GetAvailableCopyOfBook createCopyForBook(@PathVariable String id) {
+    public GetAvailableCopyOfBook createCopyForBook(@PathVariable Long id) {
         return null;
     }
 
     @PutMapping("/{id}/copies/{copyId}")
-    public GetAvailableCopyOfBook updateCopyBookStatus(@PathVariable String id,
-                                                       @PathVariable String copyId,
+    public GetAvailableCopyOfBook updateCopyBookStatus(@PathVariable Long id,
+                                                       @PathVariable Long copyId,
                                                        @RequestBody @Valid UpdateCopyBookStatusRequest request) {
-
         return null;
     }
-
 }
