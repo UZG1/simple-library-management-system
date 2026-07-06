@@ -6,6 +6,7 @@ import com.vlmel.library_management_system.api.request.UpdateCopyBookStatusReque
 import com.vlmel.library_management_system.api.response.GetAvailableCopyOfBook;
 import com.vlmel.library_management_system.api.response.GetBookDetailsResponse;
 import com.vlmel.library_management_system.api.response.GetBookResponse;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,17 +28,17 @@ public class BookController {
     }
 
     @PostMapping
-    public GetBookResponse createBook(@RequestBody CreateBookRequest request) {
+    public GetBookResponse createBook(@RequestBody @Valid CreateBookRequest request) {
         return null;
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public GetBookDetailsResponse getBookById() {
         return null;
     }
 
     @PutMapping("/{id}")
-    public GetBookResponse updateBookById(@PathVariable String id, @RequestBody UpdateBookRequest request) {
+    public GetBookResponse updateBookById(@PathVariable String id, @RequestBody @Valid UpdateBookRequest request) {
         return null;
     }
 
@@ -60,7 +61,7 @@ public class BookController {
     @PutMapping("/{id}/copies/{copyId}")
     public GetAvailableCopyOfBook updateCopyBookStatus(@PathVariable String id,
                                                        @PathVariable String copyId,
-                                                       UpdateCopyBookStatusRequest request) {
+                                                       @RequestBody @Valid UpdateCopyBookStatusRequest request) {
 
         return null;
     }
