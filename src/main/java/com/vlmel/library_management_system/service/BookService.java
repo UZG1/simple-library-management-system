@@ -7,8 +7,10 @@ import com.vlmel.library_management_system.api.response.GetBookResponse;
 import com.vlmel.library_management_system.mapper.BookMapper;
 import com.vlmel.library_management_system.model.BookEntity;
 import com.vlmel.library_management_system.repository.BookRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,8 +33,11 @@ public class BookService {
         return bookMapper.toCreateBookResponse(bookEntity);
     }
 
+    @Transactional(readOnly = true)
     public GetBookDetailsResponse getBookById(Long id) {
-
-        return null;
+        GetBookDetailsResponse getBookDetailsResponse =  bookRepository.findById(id)
+                .map(bookMapper::toBookDetailsResponse)
+                .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + id));
+        return getBookDetailsResponse;
     }
 }

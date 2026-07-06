@@ -4,7 +4,7 @@ import com.vlmel.library_management_system.api.request.CreateBookRequest;
 import com.vlmel.library_management_system.api.request.UpdateBookRequest;
 import com.vlmel.library_management_system.api.request.UpdateCopyBookStatusRequest;
 import com.vlmel.library_management_system.api.response.CreateBookResponse;
-import com.vlmel.library_management_system.api.response.GetAvailableCopyOfBookResponse;
+import com.vlmel.library_management_system.api.response.GetCopyOfBookResponse;
 import com.vlmel.library_management_system.api.response.GetBookDetailsResponse;
 import com.vlmel.library_management_system.api.response.GetBookResponse;
 import com.vlmel.library_management_system.service.BookService;
@@ -40,7 +40,7 @@ public class BookController {
 
     @GetMapping("/{id}")
     public GetBookDetailsResponse getBookById(@PathVariable Long id) {
-        return null;
+        return bookService.getBookById(id);
     }
 
     @PutMapping("/{id}")
@@ -54,19 +54,19 @@ public class BookController {
     }
 
     @GetMapping("/{id}/copies")
-    public List<GetAvailableCopyOfBookResponse> getAllAvailableCopiesOfBook(@PathVariable Long id) {
+    public List<GetCopyOfBookResponse> getAllAvailableCopiesOfBook(@PathVariable Long id) {
         return null;
     }
 
     @PostMapping("/{id}/copies")
-    public GetAvailableCopyOfBookResponse createCopyForBook(@PathVariable Long id) {
+    public GetCopyOfBookResponse createCopyForBook(@PathVariable Long id) {
         return null;
     }
 
     @PutMapping("/{id}/copies/{copyId}")
-    public GetAvailableCopyOfBookResponse updateCopyBookStatus(@PathVariable Long id,
-                                                               @PathVariable Long copyId,
-                                                               @RequestBody @Valid UpdateCopyBookStatusRequest request) {
+    public GetCopyOfBookResponse updateCopyBookStatus(@PathVariable Long id,
+                                                      @PathVariable Long copyId,
+                                                      @RequestBody @Valid UpdateCopyBookStatusRequest request) {
         return null;
     }
 }

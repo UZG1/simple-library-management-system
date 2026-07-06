@@ -1,6 +1,9 @@
 package com.vlmel.library_management_system.api.response;
 
-public class GetAvailableCopyOfBookResponse {
+import lombok.Data;
+
+@Data
+public class GetCopyOfBookResponse {
     Long id;
     Boolean available;
 }

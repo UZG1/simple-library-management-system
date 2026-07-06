@@ -2,11 +2,12 @@ package com.vlmel.library_management_system.mapper;
 
 import com.vlmel.library_management_system.api.request.CreateBookRequest;
 import com.vlmel.library_management_system.api.response.CreateBookResponse;
+import com.vlmel.library_management_system.api.response.GetBookDetailsResponse;
 import com.vlmel.library_management_system.api.response.GetBookResponse;
 import com.vlmel.library_management_system.model.BookEntity;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = BookCopyMapper.class)
 public interface BookMapper {
     GetBookResponse toBookResponse(BookEntity entity);
 
@@ -14,4 +15,5 @@ public interface BookMapper {
 
     CreateBookResponse toCreateBookResponse(BookEntity entity);
 
+    GetBookDetailsResponse toBookDetailsResponse(BookEntity entity);
 }
