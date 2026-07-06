@@ -1,4 +1,7 @@
 package com.vlmel.library_management_system.repository;
 
-public class BookRepository {
+import com.vlmel.library_management_system.model.BookEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface BookRepository extends JpaRepository<BookEntity, Long> {
 }
