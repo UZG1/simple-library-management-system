@@ -10,6 +10,8 @@ import com.vlmel.library_management_system.api.response.GetBookResponse;
 import com.vlmel.library_management_system.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,46 +31,46 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public List<GetBookResponse> getAllBooks() {
-        return bookService.getAllBooks();
+    public ResponseEntity<List<GetBookResponse>> getAllBooks() {
+        return ResponseEntity.ok(bookService.getAllBooks());
     }
 
     @PostMapping
-    public GetBookWithoutCopiesResponse createBook(@RequestBody @Valid CreateBookRequest request) {
-        return bookService.createBook(request);
+    public ResponseEntity<GetBookWithoutCopiesResponse> createBook(@RequestBody @Valid CreateBookRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.createBook(request));
     }
 
     @GetMapping("/{id}")
-    public GetBookDetailsResponse getBookById(@PathVariable Long id) {
-        return bookService.getBookById(id);
+    public ResponseEntity<GetBookDetailsResponse> getBookById(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.getBookById(id));
     }
 
     @PutMapping("/{id}")
-    public GetBookWithoutCopiesResponse updateBookById(@PathVariable Long id,
-                                                       @RequestBody @Valid UpdateBookRequest request) {
-        return bookService.updateBook(id, request);
+    public ResponseEntity<GetBookWithoutCopiesResponse> updateBookById(@PathVariable Long id,
+                                                                       @RequestBody @Valid UpdateBookRequest request) {
+        return ResponseEntity.ok(bookService.updateBook(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBookById(@PathVariable Long id) {
-        //return no content 204
+    public ResponseEntity<Void> deleteBookById(@PathVariable Long id) {
         bookService.deleteBookById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}/copies")
-    public List<GetCopyOfBookResponse> getAllAvailableCopiesOfBook(@PathVariable Long id) {
-        return bookService.getAvailableCopiesForBook(id);
+    public ResponseEntity<List<GetCopyOfBookResponse>> getAllAvailableCopiesOfBook(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.getAvailableCopiesForBook(id));
     }
 
     @PostMapping("/{id}/copies")
-    public GetCopyOfBookResponse createCopyForBook(@PathVariable Long id) {
-        return bookService.createBookCopy(id);
+    public ResponseEntity<GetCopyOfBookResponse> createCopyForBook(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.createBookCopy(id));
     }
 
     @PutMapping("/{id}/copies/{copyId}")
-    public GetCopyOfBookResponse updateCopyBookStatus(@PathVariable Long id,
-                                                      @PathVariable Long copyId,
-                                                      @RequestBody @Valid UpdateCopyBookStatusRequest request) {
-        return bookService.updateAvailabilityStatus(id, copyId, request);
+    public ResponseEntity<GetCopyOfBookResponse> updateCopyBookStatus(@PathVariable Long id,
+                                                                      @PathVariable Long copyId,
+                                                                      @RequestBody @Valid UpdateCopyBookStatusRequest request) {
+        return ResponseEntity.ok(bookService.updateAvailabilityStatus(id, copyId, request));
     }
 }
