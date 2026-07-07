@@ -6,6 +6,7 @@ import com.vlmel.library_management_system.exception.BookNotFoundException;
 import com.vlmel.library_management_system.exception.BookTitleAlreadyExistsException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
 
@@ -60,6 +62,23 @@ public class GlobalExceptionHandler {
                 .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
                 .toList();
         return buildResponse(HttpStatus.BAD_REQUEST, "Validation failed", request.getRequestURI(), details);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ProblemDetail> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
+                                                                          HttpServletRequest request) {
+        String parameterName = ex.getName();
+        String providedValue = ex.getValue() == null ? "null" : ex.getValue().toString();
+        String requiredType = ex.getRequiredType() == null ? "unknown" : ex.getRequiredType().getSimpleName();
+        String message = "Invalid value '" + providedValue + "' for parameter '" + parameterName
+                + "'. Expected type: " + requiredType;
+        return buildResponse(HttpStatus.BAD_REQUEST, message, request.getRequestURI(), null);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ProblemDetail> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+                                                                      HttpServletRequest request) {
+        return buildResponse(HttpStatus.BAD_REQUEST, "Malformed JSON request", request.getRequestURI(), null);
     }
 
     @ExceptionHandler(Exception.class)
