@@ -2,6 +2,7 @@ package com.vlmel.library_management_system.model;
 
 import com.vlmel.library_management_system.api.validation.Isbn;
 import com.vlmel.library_management_system.api.validation.PublishedYear;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -46,6 +47,6 @@ public class BookEntity {
     @Column(nullable = false)
     private Integer publishedYear;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BookCopyEntity> copies = new ArrayList<>();
 }

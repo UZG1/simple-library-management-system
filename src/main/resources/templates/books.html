@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Библиотека</title>
+    <style>
+        :root {
+            color-scheme: light dark;
+            --bg: #f4f1ea;
+            --card: #fffdf8;
+            --text: #1f2933;
+            --muted: #6b7280;
+            --accent: #1d4ed8;
+            --border: #e5e7eb;
+            --available: #166534;
+            --unavailable: #b91c1c;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            background: linear-gradient(180deg, #efe7d7 0%, var(--bg) 220px);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 2rem 1rem 3rem;
+        }
+
+        header {
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            margin: 0 0 0.5rem;
+            font-size: 2.25rem;
+        }
+
+        .subtitle {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .empty {
+            padding: 2rem;
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            background: var(--card);
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .book-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .book-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+        }
+
+        .book-title {
+            margin: 0 0 0.25rem;
+            font-size: 1.35rem;
+        }
+
+        .book-meta {
+            margin: 0 0 1rem;
+            color: var(--muted);
+        }
+
+        .copies-title {
+            margin: 0 0 0.75rem;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--muted);
+        }
+
+        .copies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .copy-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            border: 1px solid var(--border);
+            background: #f8fafc;
+        }
+
+        .copy-badge.available {
+            color: var(--available);
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+        }
+
+        .copy-badge.unavailable {
+            color: var(--unavailable);
+            border-color: #fecaca;
+            background: #fef2f2;
+        }
+
+        .no-copies {
+            margin: 0;
+            color: var(--muted);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Библиотека</h1>
+        <p class="subtitle">Все книги и их экземпляры</p>
+    </header>
+
+    <div th:if="${#lists.isEmpty(books)}" class="empty">
+        Книг пока нет.
+    </div>
+
+    <div th:unless="${#lists.isEmpty(books)}" class="book-list">
+        <article th:each="book : ${books}" class="book-card">
+            <h2 class="book-title" th:text="${book.title}">Название</h2>
+            <p class="book-meta">
+                <span th:text="${book.author}">Автор</span>
+                · ISBN <span th:text="${book.isbn}">0000000000</span>
+                · <span th:text="${book.publishedYear}">2024</span>
+            </p>
+
+            <h3 class="copies-title">Экземпляры</h3>
+
+            <p th:if="${#lists.isEmpty(book.copies)}" class="no-copies">Экземпляров нет</p>
+
+            <ul th:unless="${#lists.isEmpty(book.copies)}" class="copies">
+                <li th:each="copy : ${book.copies}"
+                    th:class="${copy.available} ? 'copy-badge available' : 'copy-badge unavailable'">
+                    <span th:text="'#' + ${copy.id}">#1</span>
+                    <span th:text="${copy.available} ? 'доступен' : 'выдан'">доступен</span>
+                </li>
+            </ul>
+        </article>
+    </div>
+</div>
+</body>
+</html>

@@ -17,6 +17,7 @@ import com.vlmel.library_management_system.model.BookCopyEntity;
 import com.vlmel.library_management_system.model.BookEntity;
 import com.vlmel.library_management_system.repository.BookRepository;
 import com.vlmel.library_management_system.repository.CopyBookRepository;
+import com.vlmel.library_management_system.service.impl.BookServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

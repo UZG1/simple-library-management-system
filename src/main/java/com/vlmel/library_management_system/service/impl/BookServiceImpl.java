@@ -1,4 +1,4 @@
-package com.vlmel.library_management_system.service;
+package com.vlmel.library_management_system.service.impl;
 
 import com.vlmel.library_management_system.api.request.CreateBookRequest;
 import com.vlmel.library_management_system.api.request.UpdateBookRequest;
@@ -17,6 +17,7 @@ import com.vlmel.library_management_system.model.BookCopyEntity;
 import com.vlmel.library_management_system.model.BookEntity;
 import com.vlmel.library_management_system.repository.BookRepository;
 import com.vlmel.library_management_system.repository.CopyBookRepository;
+import com.vlmel.library_management_system.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
