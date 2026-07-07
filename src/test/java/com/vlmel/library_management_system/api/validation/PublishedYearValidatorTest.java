@@ -8,13 +8,13 @@ import java.time.Year;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class PublishedYearValidationTest {
+class PublishedYearValidatorTest {
 
-    private PublishedYearValidation validator;
+    private PublishedYearValidator validator;
 
     @BeforeEach
     void setUp() {
-        validator = new PublishedYearValidation();
+        validator = new PublishedYearValidator();
         validator.initialize(null);
     }
 

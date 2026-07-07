@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = PublishedYearValidation.class)
+@Constraint(validatedBy = PublishedYearValidator.class)
 public @interface PublishedYear {
     String message() default "Invalid Published Year";
 

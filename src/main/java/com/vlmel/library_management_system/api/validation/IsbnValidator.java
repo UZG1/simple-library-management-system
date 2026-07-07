@@ -3,7 +3,7 @@ package com.vlmel.library_management_system.api.validation;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class IsbnValidation implements ConstraintValidator<Isbn, String> {
+public class IsbnValidator implements ConstraintValidator<Isbn, String> {
 
     private static final String ISBN_10_REGEX = "^\\d{9}[\\dX]$";
     private static final String ISBN_13_REGEX = "^97[89]\\d{10}$";

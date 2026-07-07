@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = IsbnValidation.class)
+@Constraint(validatedBy = IsbnValidator.class)
 public @interface Isbn {
     String message() default "Invalid ISBN number";
 

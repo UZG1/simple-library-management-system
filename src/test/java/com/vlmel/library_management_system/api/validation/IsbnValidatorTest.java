@@ -8,13 +8,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class IsbnValidationTest {
+class IsbnValidatorTest {
 
-    private IsbnValidation validator;
+    private IsbnValidator validator;
 
     @BeforeEach
     void setUp() {
-        validator = new IsbnValidation();
+        validator = new IsbnValidator();
         validator.initialize(null);
     }
 
