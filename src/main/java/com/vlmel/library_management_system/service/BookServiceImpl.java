@@ -18,6 +18,8 @@ import com.vlmel.library_management_system.model.BookEntity;
 import com.vlmel.library_management_system.repository.BookRepository;
 import com.vlmel.library_management_system.repository.CopyBookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,10 +34,9 @@ public class BookServiceImpl implements BookService {
     private final BookCopyMapper bookCopyMapper;
 
     @Override
-    public List<GetBookResponse> getAllBooks() {
-        return bookRepository.findAll().stream()
-                .map(bookMapper::toBookResponse)
-                .toList();
+    public Page<GetBookResponse> getAllBooks(Pageable pageable) {
+        return bookRepository.findAll(pageable)
+                .map(bookMapper::toBookResponse);
     }
 
     @Override

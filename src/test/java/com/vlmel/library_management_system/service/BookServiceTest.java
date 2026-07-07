@@ -6,6 +6,8 @@ import com.vlmel.library_management_system.model.BookEntity;
 import com.vlmel.library_management_system.repository.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -27,34 +29,36 @@ class BookServiceTest {
     private BookMapper bookMapper;
 
     @InjectMocks
-    private BookService bookService;
+    private BookServiceImpl bookService;
 
     @Test
     void getAllBooks_returnsMappedResponses() {
+        var pageable = PageRequest.of(0, 10);
         var book1 = bookEntity(1L, "Clean Code", "Robert Martin");
         var book2 = bookEntity(2L, "Effective Java", "Joshua Bloch");
 
         var response1 = bookResponse(1L, "Clean Code", "Robert Martin");
         var response2 = bookResponse(2L, "Effective Java", "Joshua Bloch");
 
-        when(bookRepository.findAll()).thenReturn(List.of(book1, book2));
+        when(bookRepository.findAll(pageable)).thenReturn(new PageImpl<>(List.of(book1, book2), pageable, 2));
         when(bookMapper.toBookResponse(book1)).thenReturn(response1);
         when(bookMapper.toBookResponse(book2)).thenReturn(response2);
 
-        var result = bookService.getAllBooks();
+        var result = bookService.getAllBooks(pageable);
 
-        assertEquals(List.of(response1, response2), result);
-        verify(bookRepository).findAll();
+        assertEquals(List.of(response1, response2), result.getContent());
+        verify(bookRepository).findAll(pageable);
     }
 
     @Test
     void getAllBooks_returnsEmptyList_whenNoBooks() {
-        when(bookRepository.findAll()).thenReturn(List.of());
+        var pageable = PageRequest.of(0, 10);
+        when(bookRepository.findAll(pageable)).thenReturn(new PageImpl<>(List.of(), pageable, 0));
 
-        var result = bookService.getAllBooks();
+        var result = bookService.getAllBooks(pageable);
 
         assertTrue(result.isEmpty());
-        verify(bookRepository).findAll();
+        verify(bookRepository).findAll(pageable);
     }
 
     private static BookEntity bookEntity(Long id, String title, String author) {
