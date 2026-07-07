@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
-@Table(name = "BookCopy")
+@Table(name = "book_copy")
 @Data
 public class BookCopyEntity {
     @Id

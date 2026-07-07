@@ -9,7 +9,6 @@ import com.vlmel.library_management_system.api.response.GetBookDetailsResponse;
 import com.vlmel.library_management_system.api.response.GetBookResponse;
 import com.vlmel.library_management_system.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,6 +30,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springdoc.core.annotations.ParameterObject;
 
 import java.util.List;
 
@@ -46,8 +46,7 @@ public class BookController {
     @Operation(summary = "Get all books", description = "Returns a paginated list of books")
     @ApiResponse(responseCode = "200", description = "Books page successfully returned")
     public ResponseEntity<Page<GetBookResponse>> getAllBooks(
-            @Parameter(description = "Pagination and sorting parameters")
-            @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable
+            @ParameterObject @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable
     ) {
         return ResponseEntity.ok(bookService.getAllBooks(pageable));
     }

@@ -6,6 +6,8 @@ import com.vlmel.library_management_system.exception.BookNotFoundException;
 import com.vlmel.library_management_system.exception.BookTitleAlreadyExistsException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -79,6 +81,21 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ProblemDetail> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                       HttpServletRequest request) {
         return buildResponse(HttpStatus.BAD_REQUEST, "Malformed JSON request", request.getRequestURI(), null);
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ProblemDetail> handlePropertyReference(PropertyReferenceException ex,
+                                                                 HttpServletRequest request) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI(), null);
+    }
+
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    public ResponseEntity<ProblemDetail> handleInvalidDataAccess(InvalidDataAccessApiUsageException ex,
+                                                                 HttpServletRequest request) {
+        if (ex.getCause() instanceof PropertyReferenceException propertyEx) {
+            return buildResponse(HttpStatus.BAD_REQUEST, propertyEx.getMessage(), request.getRequestURI(), null);
+        }
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI(), null);
     }
 
     @ExceptionHandler(Exception.class)
