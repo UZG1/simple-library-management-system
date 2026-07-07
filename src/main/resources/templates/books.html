@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Библиотека</title>
+    <title>Library</title>
     <style>
         :root {
             color-scheme: light dark;
@@ -11,10 +11,10 @@
             --card: #fffdf8;
             --text: #1f2933;
             --muted: #6b7280;
-            --accent: #1d4ed8;
             --border: #e5e7eb;
             --available: #166534;
             --unavailable: #b91c1c;
+            --accent: #1d4ed8;
         }
 
         * {
@@ -81,6 +81,31 @@
             color: var(--muted);
         }
 
+        .show-copies-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.45rem 0.9rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #f8fafc;
+            color: var(--accent);
+            font-family: inherit;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .show-copies-btn:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .copies-panel {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
         .copies-title {
             margin: 0 0 0.75rem;
             font-size: 0.95rem;
@@ -121,46 +146,112 @@
             background: #fef2f2;
         }
 
-        .no-copies {
+        .no-copies,
+        .copies-error {
             margin: 0;
             color: var(--muted);
             font-style: italic;
+        }
+
+        .copies-error {
+            color: var(--unavailable);
+            font-style: normal;
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <header>
-        <h1>Библиотека</h1>
-        <p class="subtitle">Все книги и их экземпляры</p>
+        <h1>Library</h1>
+        <p class="subtitle">All books and their copies</p>
     </header>
 
-    <div th:if="${#lists.isEmpty(books)}" class="empty">
-        Книг пока нет.
-    </div>
+    <p th:if="${#lists.isEmpty(books)}" class="empty">No books yet.</p>
 
     <div th:unless="${#lists.isEmpty(books)}" class="book-list">
-        <article th:each="book : ${books}" class="book-card">
-            <h2 class="book-title" th:text="${book.title}">Название</h2>
+        <article th:each="book : ${books}" class="book-card" th:attr="data-book-id=${book.id}">
+            <h2 class="book-title" th:text="${book.title}">Book title</h2>
             <p class="book-meta">
-                <span th:text="${book.author}">Автор</span>
-                · ISBN <span th:text="${book.isbn}">0000000000</span>
-                · <span th:text="${book.publishedYear}">2024</span>
+                <span th:text="${book.author}">Author</span>
+                · ISBN <span th:text="${book.isbn}">ISBN</span>
+                · <span th:text="${book.publishedYear}">Year</span>
             </p>
 
-            <h3 class="copies-title">Экземпляры</h3>
-
-            <p th:if="${#lists.isEmpty(book.copies)}" class="no-copies">Экземпляров нет</p>
-
-            <ul th:unless="${#lists.isEmpty(book.copies)}" class="copies">
-                <li th:each="copy : ${book.copies}"
-                    th:class="${copy.available} ? 'copy-badge available' : 'copy-badge unavailable'">
-                    <span th:text="'#' + ${copy.id}">#1</span>
-                    <span th:text="${copy.available} ? 'доступен' : 'выдан'">доступен</span>
-                </li>
-            </ul>
+            <button type="button" class="show-copies-btn">Show copies</button>
+            <div class="copies-panel hidden"></div>
         </article>
     </div>
 </div>
+
+<script>
+    function escapeHtml(value) {
+        return String(value)
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function renderCopies(copies) {
+        if (!copies || copies.length === 0) {
+            return '<p class="no-copies">No copies available.</p>';
+        }
+
+        const items = copies.map(copy => {
+            const statusClass = copy.available ? 'available' : 'unavailable';
+            const statusText = copy.available ? 'Available' : 'Checked out';
+            return `<li class="copy-badge ${statusClass}">
+                <span>#${copy.id}</span>
+                <span>${statusText}</span>
+            </li>`;
+        }).join('');
+
+        return `<h3 class="copies-title">Copies</h3><ul class="copies">${items}</ul>`;
+    }
+
+    document.querySelectorAll('.book-card').forEach(card => {
+        const button = card.querySelector('.show-copies-btn');
+        const panel = card.querySelector('.copies-panel');
+        const bookId = card.dataset.bookId;
+
+        button.addEventListener('click', async () => {
+            if (panel.dataset.loaded === 'true') {
+                const hidden = panel.classList.toggle('hidden');
+                const count = panel.dataset.copyCount ?? '0';
+                button.textContent = hidden ? 'Show copies' : `Hide copies (${count})`;
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = 'Loading...';
+
+            try {
+                const response = await fetch(`books/${bookId}`);
+                if (!response.ok) {
+                    throw new Error(`Failed to load copies (${response.status})`);
+                }
+
+                const book = await response.json();
+                const copies = book.copies ?? [];
+                panel.innerHTML = renderCopies(copies);
+                panel.dataset.loaded = 'true';
+                panel.dataset.copyCount = String(copies.length);
+                panel.classList.remove('hidden');
+                button.textContent = `Hide copies (${copies.length})`;
+            } catch (error) {
+                panel.innerHTML = `<p class="copies-error">${escapeHtml(error.message ?? 'Failed to load copies')}</p>`;
+                panel.classList.remove('hidden');
+                button.textContent = 'Show copies';
+            } finally {
+                button.disabled = false;
+            }
+        });
+    });
+</script>
 </body>
 </html>
