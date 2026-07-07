@@ -3,7 +3,7 @@ package com.vlmel.library_management_system.api.response;
 import lombok.Data;
 
 @Data
-public class CreateBookResponse {
+public class GetBookWithoutCopiesResponse {
     Long id;
     String title;
     String author;

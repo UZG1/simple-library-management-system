@@ -1,43 +1,29 @@
 package com.vlmel.library_management_system.service;
 
 import com.vlmel.library_management_system.api.request.CreateBookRequest;
-import com.vlmel.library_management_system.api.response.CreateBookResponse;
+import com.vlmel.library_management_system.api.request.UpdateBookRequest;
+import com.vlmel.library_management_system.api.request.UpdateCopyBookStatusRequest;
 import com.vlmel.library_management_system.api.response.GetBookDetailsResponse;
 import com.vlmel.library_management_system.api.response.GetBookResponse;
-import com.vlmel.library_management_system.mapper.BookMapper;
-import com.vlmel.library_management_system.model.BookEntity;
-import com.vlmel.library_management_system.repository.BookRepository;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.vlmel.library_management_system.api.response.GetBookWithoutCopiesResponse;
+import com.vlmel.library_management_system.api.response.GetCopyOfBookResponse;
 
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
-public class BookService {
-    private final BookRepository bookRepository;
-    private final BookMapper bookMapper;
+public interface BookService {
+    List<GetBookResponse> getAllBooks();
 
-    public List<GetBookResponse> getAllBooks() {
-        return bookRepository.findAll().stream()
-                .map(bookMapper::toBookResponse)
-                .toList();
-    }
+    GetBookWithoutCopiesResponse createBook(CreateBookRequest request);
 
-    public CreateBookResponse createBook(CreateBookRequest request) {
-        BookEntity bookEntity =  bookRepository.save(
-                bookMapper.toBookEntity(request)
-        );
-        return bookMapper.toCreateBookResponse(bookEntity);
-    }
+    GetBookDetailsResponse getBookById(Long id);
 
-    @Transactional(readOnly = true)
-    public GetBookDetailsResponse getBookById(Long id) {
-        GetBookDetailsResponse getBookDetailsResponse =  bookRepository.findById(id)
-                .map(bookMapper::toBookDetailsResponse)
-                .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + id));
-        return getBookDetailsResponse;
-    }
+    GetBookWithoutCopiesResponse updateBook(Long id, UpdateBookRequest request);
+
+    void deleteBookById(Long id);
+
+    List<GetCopyOfBookResponse> getAvailableCopiesForBook(Long id);
+
+    GetCopyOfBookResponse createBookCopy(Long id);
+
+    GetCopyOfBookResponse updateAvailabilityStatus(Long id, Long copyId, UpdateCopyBookStatusRequest request);
 }
