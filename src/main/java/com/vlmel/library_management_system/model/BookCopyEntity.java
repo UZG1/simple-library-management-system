@@ -12,9 +12,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
-@Table(name = "book_copy")
+@Table(name = BookCopyEntity.TABLE_NAME)
 @Data
 public class BookCopyEntity {
+
+    public static final String TABLE_NAME = "book_copies";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -18,9 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "book")
+@Table(name = BookEntity.TABLE_NAME)
 @Data
 public class BookEntity {
+
+    public static final String TABLE_NAME = "books";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
