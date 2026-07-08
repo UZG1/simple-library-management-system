@@ -1,10 +1,10 @@
 # Simple Library Management System
 
-A Spring Boot REST API for managing books and their copies, with optional Thymeleaf UI and Swagger documentation.
+A Spring Boot REST API for managing books and their copies, with Thymeleaf UI and Swagger documentation.
 
 ## Requirements
 
-- Java 25+
+- Java 25
 - Maven 3.9+ (or use the included Maven Wrapper)
 - PostgreSQL (or any PostgreSQL-compatible database, e.g. CockroachDB)
 
@@ -18,20 +18,6 @@ spring.datasource.username=your_username
 spring.datasource.password=your_password
 ```
 
-Alternatively, you can keep secrets out of version control by creating a local file:
-
-1. Copy `application-local.properties.example` to `application-local.properties`
-2. Fill in your database credentials there
-3. Activate the local profile when running (see below)
-
-Environment variables are also supported:
-
-```bash
-export DB_URL=jdbc:postgresql://localhost:5432/library_management
-export DB_USERNAME=your_username
-export DB_PASSWORD=your_password
-```
-
 ## How to run
 
 ### 1. Clone the repository
@@ -43,7 +29,7 @@ cd simple-library-management-system
 
 ### 2. Configure the database
 
-Update `application.properties` (or create `application-local.properties`) with your database settings.
+Update `application.properties` with your database settings.
 
 Make sure the database exists before starting the application.
 
@@ -55,30 +41,12 @@ Using Maven Wrapper:
 ./mvnw spring-boot:run
 ```
 
-On Windows:
-
-```bash
-mvnw.cmd spring-boot:run
-```
-
-With a local profile (recommended if you use `application-local.properties`):
-
-```bash
-./mvnw spring-boot:run -Dspring-boot.run.profiles=local
-```
-
 ### 4. Load sample data (optional)
 
 To inject sample books and copies on startup, activate the `sample-data` profile:
 
 ```bash
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=sample-data
-```
-
-You can combine profiles:
-
-```bash
-./mvnw spring-boot:run -Dspring-boot.run.profiles=local,sample-data
 ```
 
 When `sample-data` is active, the application loads demo data only if the database is empty:
@@ -124,13 +92,3 @@ Tests use an in-memory H2 database and do not require a running PostgreSQL insta
 ```bash
 ./mvnw test
 ```
-
-## Tech stack
-
-- Spring Boot 4.1
-- Spring Data JPA
-- PostgreSQL
-- MapStruct
-- Bean Validation
-- springdoc-openapi (Swagger)
-- Thymeleaf
